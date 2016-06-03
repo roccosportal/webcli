@@ -3,7 +3,7 @@
   "name": "webcli",
   "version": "1.0",
   "description": "A command line for the browser",
-  "homepage_url": "https://github.com/",
+  "homepage_url": "https://github.com/roccosportal/webcli",
   "applications": {
     "gecko": {
       "id": "webcli@mozilla.org",
