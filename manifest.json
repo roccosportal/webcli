@@ -1,0 +1,53 @@
+{
+  "manifest_version": 2,
+  "name": "webcli",
+  "version": "1.0",
+  "description": "A command line for the browser",
+  "homepage_url": "https://github.com/",
+  "applications": {
+    "gecko": {
+      "id": "webcli@mozilla.org",
+      "strict_min_version": "48.0a1"
+    }
+  },
+
+  "permissions": [
+    "activeTab",
+    "bookmarks",
+    "tabs",
+    "notifications"
+  ],
+
+  "background": {
+    "scripts": [
+      "src/main.js",
+      "src/messenger.js",
+      "src/commandparser.js",
+      "src/eventhandler.js",
+      "src/autocomplete.js",
+      "src/action.js",
+      "src/ui.js",
+      "commands/bookmarks/main.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "js": ["src/uiloader.js"],
+      "run_at": "document_idle",
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "web_accessible_resources": [
+    "interface/ui.html"
+  ],
+
+  "commands": {
+    "toggle": {
+      "suggested_key": { "default": "Ctrl+Shift+L" },
+      "description": "togge cli"
+    }
+  }
+
+}
