@@ -299,11 +299,22 @@ webcli.commands.bookmarks.fuzzyFindByPath = function(path, callback){
     var response = null;
     browser.bookmarks.getTree(function(list){
         // TODO: is this always list[0].children[2].children?
-        pathMatch = walker(list[0].children[2].children, pathObject.parts, 0, '');
-        if(pathMatch.item === null && pathObject.parts.length <= 1){
-          pathMatch.item = list[0].children[2];
-          pathMatch.level = -1;
-          pathMatch.itemPath = '';
+        var root = list[0].children[2];
+
+
+        var pathMatch = {};
+        pathMatch.item = root;
+        pathMatch.level = -1;
+        pathMatch.itemPath = '';
+
+        if(typeof root.children !== 'undefined'){
+          pathMatch = walker(root.children, pathObject.parts, 0, '');
+
+          if(pathMatch.item === null && pathObject.parts.length <= 1){
+            pathMatch.item = root;
+            pathMatch.level = -1;
+            pathMatch.itemPath = '';
+          }
         }
 
         pathMatch.path = pathObject;
