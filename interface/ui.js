@@ -28,18 +28,28 @@ ui.init = function(){
       e.preventDefault();
       ui.doAction(value);
     }
+    else if(keyCode == 37 && ui.$input.selectionStart == ui.$input.value.length && ui.autocomplete.selectedIndex !== 0){
+      e.preventDefault();
+    }
+    else if(keyCode == 39 && ui.$input.selectionStart == ui.$input.value.length ){
+      e.preventDefault();
+    }
+    else {
+      ui.resizeInput();
+    }
 
   });
   ui.$input.addEventListener('keyup', function(e){
     var value = ui.$input.value;
     var keyCode = e.keyCode || e.which;
-    if(keyCode == 39){
-      e.preventDefault();
-      ui.moveSuggestions(true);
-    }
-    else if(keyCode == 37){
+
+    if(keyCode == 37 && ui.$input.selectionStart == ui.$input.value.length && ui.autocomplete.selectedIndex !== 0){
       e.preventDefault();
       ui.moveSuggestions(false);
+    }
+    else if(keyCode == 39 && ui.$input.selectionStart == ui.$input.value.length){
+      e.preventDefault();
+      ui.moveSuggestions(true);
     }
     else {
       ui.getSuggestions(value);
@@ -68,15 +78,14 @@ ui.useSuggestion = function(){
     ui.$input.value = ui.autocomplete.command.sStart + ' ' + replaceWith;
   }
   ui.$suggs.innerHTML = '';
+
+  ui.resizeInput();
 };
 
 ui.moveSuggestions = function(forward){
   if(ui.autocomplete === null || ui.autocomplete.suggestions.length === 0){
     return;
   }
-
-  var div = document.querySelector("#suggs div.highlighted");
-  div.className = '';
 
   if(forward){
     ui.autocomplete.selectedIndex += 1;
@@ -91,11 +100,7 @@ ui.moveSuggestions = function(forward){
     }
   }
 
-
-
-  div = document.querySelector("#suggs div:nth-of-type(" + (ui.autocomplete.selectedIndex + 1) + ")");
-  div.className = 'highlighted';
-
+  ui.buildSuggestions();
 
 };
 
@@ -144,22 +149,91 @@ ui.getSuggestionsResponse = function(response, request){
       else {
         ui.$sugg.innerHTML = sStart + ' ' + replaceWith;
       }
-      ui.$suggs.innerHTML = '<div class=\'highlighted\'>' + suggestions[0].title + '</div>';
+      ui.buildSuggestions();
     }
     else {
         ui.$sugg.innerHTML = '';
-        var suggestionsHtml = '';
-        var isFirst = true;
-        for (var i = 0; i < suggestions.length; i++) {
-          suggestionsHtml += '<div';
-          if(isFirst){
-            isFirst = false;
-            suggestionsHtml += ' class=\'highlighted\'';
-          }
-          suggestionsHtml += '>' + suggestions[i].title + '</div>';
-        }
-        ui.$suggs.innerHTML = suggestionsHtml;
+        ui.buildSuggestions();
     }
+};
+
+ui.buildSuggestions = function(){
+  var selectedIndex = ui.autocomplete.selectedIndex;
+  var suggestionsHtml = '';
+  var maxWidth = screen.width - ui.$input.width - 20;
+  var neededWidth = 0;
+  var suggestions = ui.autocomplete.suggestions;
+
+  for(var j = 0; j < suggestions.length; j++) {
+      neededWidth += suggestions[j].title.length * 8 + 10;
+  }
+
+  var start = 0;
+  var end = suggestions.length - 1;
+  if(neededWidth > maxWidth){
+    var newWidth = 0;
+    var suffix = true;
+    var stopSuffix = false;
+    var stopPrefix = false;
+    start = selectedIndex;
+    end = selectedIndex;
+    newWidth = suggestions[selectedIndex].title.length * 8 + 10;
+    while (newWidth < maxWidth && !(stopSuffix && stopPrefix)) {
+      if(suffix){
+        suffix = false;
+        if(end !== suggestions.length - 1){
+          end += 1;
+          newWidth += suggestions[end].title.length * 8 + 10;
+        }
+        else {
+          stopSuffix = true;
+        }
+      }
+      else {
+        suffix = true;
+        if(start !== 0){
+          start -= 1;
+          newWidth += suggestions[start].title.length * 8 + 10;
+        }
+        else {
+          stopPrefix = true;
+        }
+      }
+
+    }
+    // remove last
+    if (!suffix){
+      end -= 1;
+    }
+    else {
+      start += 1;
+    }
+  }
+
+  if(start !== 0){
+    suggestionsHtml += '<div>...</div>';
+  }
+
+  for (var i = start; i <= end; i++) {
+    suggestionsHtml += '<div';
+    if(i==selectedIndex){
+      suggestionsHtml += ' class=\'highlighted\'';
+    }
+    suggestionsHtml += '>' + suggestions[i].title + '</div>';
+
+  }
+
+  if(end + 1 !== suggestions.length){
+    suggestionsHtml += '<div>...</div>';
+  }
+
+
+  ui.$suggs.innerHTML = suggestionsHtml;
+};
+
+ui.resizeInput = function(){
+  var chars = ui.$input.value.length;
+  ui.$input.style = 'width:' + (chars * 8 + 10) + 'px';
 };
 
 ui.init();
