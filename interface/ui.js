@@ -44,7 +44,7 @@ ui.init = function(){
 
 
 ui.useSuggestion = function(){
-  if(ui.autocomplete === null){
+  if(ui.autocomplete === null || ui.autocomplete.suggestions.length === 0){
     return;
   }
   var replaceWith = ui.autocomplete.suggestions[0].replaceWith.replace(/ /g, '\\ ');
