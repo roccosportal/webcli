@@ -19,6 +19,14 @@ body {
 #suggs {
   float:right;
 }
+#suggs div {
+  padding: 2px;
+  float: left;
+  padding: 2px 5px;
+}
+#suggs div.highlighted {
+  background-color: blueviolet;
+}
 #webcli-ui input, #sugg, #suggs {
   line-height: 14px;
   padding: 0px;

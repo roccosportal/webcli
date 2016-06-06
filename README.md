@@ -39,8 +39,6 @@ And also change the title.
 
 ## Todos
 
-* Better design for the autocomplete suggestions in the ui
-* Choosable autocomplete suggestions by pressing left/right arrow
 * Better notifications
 * Add help command
 * Current suggestions ui can not handle a lot of suggestions

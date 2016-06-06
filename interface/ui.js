@@ -28,11 +28,22 @@ ui.init = function(){
       e.preventDefault();
       ui.doAction(value);
     }
+
   });
   ui.$input.addEventListener('keyup', function(e){
     var value = ui.$input.value;
     var keyCode = e.keyCode || e.which;
-    ui.getSuggestions(value);
+    if(keyCode == 39){
+      e.preventDefault();
+      ui.moveSuggestions(true);
+    }
+    else if(keyCode == 37){
+      e.preventDefault();
+      ui.moveSuggestions(false);
+    }
+    else {
+      ui.getSuggestions(value);
+    }
   });
   ui.$sugg = document.querySelector("#webcli-ui #sugg");
   ui.$sugg.addEventListener('click', function(){
@@ -47,7 +58,7 @@ ui.useSuggestion = function(){
   if(ui.autocomplete === null || ui.autocomplete.suggestions.length === 0){
     return;
   }
-  var replaceWith = ui.autocomplete.suggestions[0].replaceWith.replace(/ /g, '\\ ');
+  var replaceWith = ui.autocomplete.suggestions[ui.autocomplete.selectedIndex].replaceWith.replace(/ /g, '\\ ');
   var parts = ui.autocomplete.command.parts;
   ui.$sugg.innerHTML = '';
   if(parts.length <= 1){
@@ -57,6 +68,35 @@ ui.useSuggestion = function(){
     ui.$input.value = ui.autocomplete.command.sStart + ' ' + replaceWith;
   }
   ui.$suggs.innerHTML = '';
+};
+
+ui.moveSuggestions = function(forward){
+  if(ui.autocomplete === null || ui.autocomplete.suggestions.length === 0){
+    return;
+  }
+
+  var div = document.querySelector("#suggs div.highlighted");
+  div.className = '';
+
+  if(forward){
+    ui.autocomplete.selectedIndex += 1;
+    if(ui.autocomplete.suggestions.length == ui.autocomplete.selectedIndex){
+      ui.autocomplete.selectedIndex = 0;
+    }
+  }
+  else {
+    ui.autocomplete.selectedIndex -= 1;
+    if(ui.autocomplete.selectedIndex < 0){
+      ui.autocomplete.selectedIndex = ui.autocomplete.suggestions.length -1;
+    }
+  }
+
+
+
+  div = document.querySelector("#suggs div:nth-of-type(" + (ui.autocomplete.selectedIndex + 1) + ")");
+  div.className = 'highlighted';
+
+
 };
 
 
@@ -91,6 +131,7 @@ ui.getSuggestionsResponse = function(response, request){
     var sStart = response.command.sStart;
 
     ui.autocomplete = response;
+    ui.autocomplete.selectedIndex = 0;
     if (suggestions.length === 0){
       ui.$sugg.innerHTML = '';
       ui.$suggs.innerHTML = '';
@@ -103,15 +144,21 @@ ui.getSuggestionsResponse = function(response, request){
       else {
         ui.$sugg.innerHTML = sStart + ' ' + replaceWith;
       }
-      ui.$suggs.innerHTML = suggestions[0].title;
+      ui.$suggs.innerHTML = '<div class=\'highlighted\'>' + suggestions[0].title + '</div>';
     }
     else {
         ui.$sugg.innerHTML = '';
-        var tmpSuggestions = [];
+        var suggestionsHtml = '';
+        var isFirst = true;
         for (var i = 0; i < suggestions.length; i++) {
-          tmpSuggestions.push(suggestions[i].title);
+          suggestionsHtml += '<div';
+          if(isFirst){
+            isFirst = false;
+            suggestionsHtml += ' class=\'highlighted\'';
+          }
+          suggestionsHtml += '>' + suggestions[i].title + '</div>';
         }
-        ui.$suggs.innerHTML = tmpSuggestions.join(' | ');
+        ui.$suggs.innerHTML = suggestionsHtml;
     }
 };
 
