@@ -46,7 +46,7 @@ ui.init = function(){
     }
   });
   ui.$sugg = document.querySelector("#webcli-ui #sugg");
-  ui.$sugg.addEventListener('click', function(){
+  document.querySelector("#webcli-ui").addEventListener('click', function(){
     document.getElementById("input").focus();
   });
   ui.$suggs = document.querySelector("#webcli-ui #suggs");
