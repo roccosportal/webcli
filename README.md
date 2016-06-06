@@ -42,4 +42,5 @@ And also change the title.
 * Better notifications
 * Add help command
 * Current suggestions ui can not handle a lot of suggestions
-* Change fixed with for the command line
+* Change fixed witdh for the command line
+* Add an open function to the bookmark command
