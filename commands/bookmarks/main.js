@@ -310,7 +310,7 @@ webcli.commands.bookmarks.fuzzyFindByPath = function(path, callback){
         if(typeof root.children !== 'undefined'){
           pathMatch = walker(root.children, pathObject.parts, 0, '');
 
-          if(pathMatch.item === null && pathObject.parts.length <= 1){
+          if(pathMatch.item === null){
             pathMatch.item = root;
             pathMatch.level = -1;
             pathMatch.itemPath = '';
