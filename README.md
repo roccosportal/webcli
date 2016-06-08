@@ -1,8 +1,11 @@
 # webcli
 
-This WebExtension provides a simple command line interface for Firefox to execute basic commands. You can open the small interface by pressing the shortcut Ctrl+Shift+L. Warning: this is not even alpha status. You can test this extension by opening `about:debugging` as website. Click on `Load Temporary Add-on`. Browse to this extension and open `the manifest.json`.
+This WebExtension provides a simple command line interface for Firefox to execute basic commands. You can open the small interface by pressing the shortcut Ctrl+Shift+L. Warning: this is not even alpha status. You can test this extension by opening `about:debugging` as website. Click on `Load Temporary Add-on`. Browse to this extension and open the `manifest.json`.
 
 ![](https://github.com/roccosportal/webcli/blob/master/preview.gif)
+
+## requirements
+Firefox version 48.0a1 or higher.
 
 ## commands
 
