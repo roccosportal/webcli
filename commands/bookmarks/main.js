@@ -203,7 +203,7 @@ webcli.commands.bookmarks.move = function(from, to, callback){
             }
 
           };
-
+ 
           if(toPathMatch.item !== null && toPathMatch.isMatch){
               onCreated(toPathMatch);
           }
