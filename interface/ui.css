@@ -1,7 +1,23 @@
+body, div, ul, li, p {
+  margin: 0px;
+  padding: 0px;
+  border:0px;
+  outline: 0px;
+}
+
+ul {
+  list-style-type:none;
+}
+
 
 body {
+  overflow: hidden;
+}
+
+#inputarea {
   background-color: #0A1F26;
-  margin: 0px 8px;
+  padding: 0px 8px;
+  height: 20px;
 }
 
 
@@ -34,4 +50,37 @@ body {
   border: 0px;
   font: normal 14px Arial;
   color:white;
+}
+
+
+#outputarea {
+  /*height: 60px;*/
+  /*overflow-y: auto;*/
+  background-color: #0E313D;
+  color: #BCC1C2;
+  padding: 0px 8px;
+  line-height: 14px;
+  font: normal 14px Arial;
+}
+
+#output {
+  padding: 3px 0px;
+}
+
+#outputarea ul li p.state {
+  float:left;
+  font-weight: bold;
+  padding-right: 4px;
+}
+
+#outputarea ul li p.failure {
+  color: red;
+}
+
+#outputarea ul li p.success {
+  color: green;
+}
+
+#outputarea ul li p.failure {
+  color: red;
 }

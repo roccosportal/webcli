@@ -42,6 +42,5 @@ And also change the title.
 
 ## Todos
 
-* Better notifications
 * Add help command
 * Add an open function to the bookmark command

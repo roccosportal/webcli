@@ -4,6 +4,7 @@ ui.port = null;
 ui.$input = null;
 ui.$sugg = null;
 ui.$suggs = null;
+ui.$outputlist = null;
 ui.autocomplete =  null;
 
 ui.init = function(){
@@ -60,6 +61,7 @@ ui.init = function(){
     document.getElementById("input").focus();
   });
   ui.$suggs = document.querySelector("#webcli-ui #suggs");
+  ui.$outputlist = document.querySelector("#output-list");
   document.getElementById("input").focus();
 };
 
@@ -125,6 +127,10 @@ ui.doActionResponse = function(response, request){
     ui.$input.value = '';
     ui.$sugg.innerHTML = '';
     ui.$suggs.innerHTML = '';
+  }
+
+  if(typeof response.message !== 'undefined'){
+    ui.appendOutput(response.success, response.message);
   }
 };
 
@@ -227,13 +233,20 @@ ui.buildSuggestions = function(){
     suggestionsHtml += '<div>...</div>';
   }
 
-
   ui.$suggs.innerHTML = suggestionsHtml;
 };
 
 ui.resizeInput = function(){
   var chars = ui.$input.value.length;
   ui.$input.style = 'width:' + (chars * 8 + 10) + 'px';
+};
+
+ui.appendOutput = function(success, message){
+  var li = document.createElement('li');
+  var state = success ? 'success' : 'failure';
+
+  li.innerHTML = '<p class="state ' + state + '">*</p>' +  message;
+  ui.$outputlist.insertAdjacentElement('afterbegin', li);
 };
 
 ui.init();

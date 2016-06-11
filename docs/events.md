@@ -14,4 +14,8 @@ No values.
 | --- | --- |
 | s | The string that shall be executed |
 ## webcli.action.do.response
-It's ambiguous. It's a TODO.
+| Value | Description |
+| --- | --- |
+| command | the command object |
+| success | states if the command could be interpreted and executed |
+| message | a message that contains further information |

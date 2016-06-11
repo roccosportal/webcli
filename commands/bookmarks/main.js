@@ -65,42 +65,39 @@ webcli.commands.bookmarks.onDo = function(options, callback){
     }
 
     if(args[0] === 'add'){
+      var addpath = (typeof args[1] !== 'undefined') ? args[1] : '/';
       // add bookmark
-      return webcli.commands.bookmarks.add(args[1], options.ui.tab.url, options.ui.tab.title, function(bookmark){
-
-          // TODO: create a better notification
-          browser.notifications.create({
-            'type': 'basic',
-            'title': 'Bookmark created',
-            'message': 'Bookmark created'
-          });
-          callback({success : true, bookmark : bookmark});
+      return webcli.commands.bookmarks.add(addpath, options.ui.tab.url, options.ui.tab.title, function(response){
+          callback(true, 'Bookmark created: ' + JSON.stringify({title : response.bookmark.title, path: addpath}));
       });
     }
     else if (args[0] === 'remove') {
-      return webcli.commands.bookmarks.remove(args[1], function(response){
+      var removepath = (typeof args[1] !== 'undefined') ? args[1] : '/';
+      return webcli.commands.bookmarks.remove(removepath, function(response){
           if(response.success){
-            // TODO: create a better notification
-            browser.notifications.create({
-              'type': 'basic',
-              'title': 'Bookmark removed',
-              'message': 'Bookmark removed'
-            });
+            var type = response.isFolder ? 'Folder' : 'Bookmark';
+            callback(true, type + ' removed: ' + JSON.stringify({title : response.bookmark.title, path: removepath}));
           }
-          callback(response);
+          else {
+            callback(false, 'Path not found: ' + JSON.stringify({ path: removepath}));
+          }
       });
     }
     else if (args[0] === 'move'){
-      return webcli.commands.bookmarks.move(args[1], args[2], function(response){
+      var frompath = (typeof args[1] !== 'undefined') ? args[1] : '/';
+      var topath = (typeof args[2] !== 'undefined') ? args[2] : '/';
+      return webcli.commands.bookmarks.move(frompath, topath, function(response){
           if(response.success){
-            // TODO: create a better notification
-            browser.notifications.create({
-              'type': 'basic',
-              'title': 'Bookmark moved',
-              'message': 'Bookmark moved'
-            });
+            var type = response.isFolder ? 'Folder' : 'Bookmark';
+            var json = { from : frompath, to : topath};
+            if(response.newTitle !== null){
+              json.title = response.newTitle;
+            }
+            callback(true, type +' moved: ' + JSON.stringify(json));
           }
-          callback(response);
+          else {
+            callback(false, 'Path not found: ' + JSON.stringify({ path: frompath}));
+          }
       });
     }
 };
@@ -154,7 +151,8 @@ webcli.commands.bookmarks.remove = function(path, callback){
   webcli.commands.bookmarks.fuzzyFindByPath(path, function(item){
      if(item.item !== null && item.isMatch){
        webcli.commands.bookmarks.removeBookmark(item.item, function(){
-         callback({success : true});
+         var isFolder = !(typeof item.item.url !== 'undefined' || item.item.url === null || item.item.url === '' );
+         callback({success : true, isFolder : isFolder, bookmark : item.item});
        });
      }
      else {
@@ -192,18 +190,19 @@ webcli.commands.bookmarks.move = function(from, to, callback){
 
         webcli.commands.bookmarks.fuzzyFindByPath(folderPath, function(toPathMatch){
           var onCreated = function(toPathMatch){
+            var isFolder = !(typeof fromPathMatch.item.url !== 'undefined' || fromPathMatch.item.url === null || fromPathMatch.item.url === '' );
             browser.bookmarks.move(fromPathMatch.item.id, {parentId: toPathMatch.item.id});
             if(newTitle !== null){
               browser.bookmarks.update(fromPathMatch.item.id, {title:newTitle}, function(){
-                callback({success:true});
+                callback({success:true, newTitle : newTitle, isFolder : isFolder});
               });
             }
             else {
-              callback({success:true});
+              callback({success:true, newTitle : newTitle, isFolder : isFolder});
             }
 
           };
- 
+
           if(toPathMatch.item !== null && toPathMatch.isMatch){
               onCreated(toPathMatch);
           }
