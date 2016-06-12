@@ -5,6 +5,10 @@ body, div, ul, li, p {
   outline: 0px;
 }
 
+input {
+  outline: none;
+}
+
 ul {
   list-style-type:none;
 }

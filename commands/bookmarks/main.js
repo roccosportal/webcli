@@ -191,9 +191,9 @@ webcli.commands.bookmarks.move = function(from, to, callback){
         webcli.commands.bookmarks.fuzzyFindByPath(folderPath, function(toPathMatch){
           var onCreated = function(toPathMatch){
             var isFolder = !(typeof fromPathMatch.item.url !== 'undefined' || fromPathMatch.item.url === null || fromPathMatch.item.url === '' );
-            browser.bookmarks.move(fromPathMatch.item.id, {parentId: toPathMatch.item.id});
+            chrome.bookmarks.move(fromPathMatch.item.id, {parentId: toPathMatch.item.id});
             if(newTitle !== null){
-              browser.bookmarks.update(fromPathMatch.item.id, {title:newTitle}, function(){
+              chrome.bookmarks.update(fromPathMatch.item.id, {title:newTitle}, function(){
                 callback({success:true, newTitle : newTitle, isFolder : isFolder});
               });
             }
@@ -232,7 +232,7 @@ webcli.commands.bookmarks.createBookmark = function(title, parent, url, callback
    if(url !== null){
      bookmark.url = url;
    }
-   return browser.bookmarks.create(bookmark, callback);
+   return chrome.bookmarks.create(bookmark, callback);
 };
 
 
@@ -247,10 +247,10 @@ webcli.commands.bookmarks.removeBookmark = function(bookmark, callback){
   };
 
   if(typeof bookmark.children !== 'undefined' && bookmark.children.length > 0){
-    browser.bookmarks.removeTree(bookmark.id, reponseCallback);
+    chrome.bookmarks.removeTree(bookmark.id, reponseCallback);
   }
   else {
-    browser.bookmarks.remove(bookmark.id, reponseCallback);
+    chrome.bookmarks.remove(bookmark.id, reponseCallback);
   }
 };
 
@@ -296,9 +296,9 @@ webcli.commands.bookmarks.fuzzyFindByPath = function(path, callback){
     };
     var pathObject = webcli.commands.bookmarks.parsePath(path);
     var response = null;
-    browser.bookmarks.getTree(function(list){
+    chrome.bookmarks.getTree(function(list){
         // TODO: is this always list[0].children[2].children?
-        var root = list[0].children[2];
+        var root = webcli.isFirefox ? list[0].children[2] : list[0].children[1];
 
 
         var pathMatch = {};

@@ -36,5 +36,5 @@ var uiloader = {
 
 // handle messages from the add-on background page (only in top level iframes)
 if (window.parent == window) {
-  browser.runtime.onMessage.addListener(uiloader.eventListener);
+  chrome.runtime.onMessage.addListener(uiloader.eventListener);
 }
