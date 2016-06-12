@@ -1,11 +1,17 @@
 # webcli
 
-This WebExtension provides a simple command line interface for Firefox to execute basic commands. You can open the small interface by pressing the shortcut Ctrl+Shift+L. Warning: this is not even alpha status. You can test this extension by opening `about:debugging` as website. Click on `Load Temporary Add-on`. Browse to this extension and open the `manifest.json`.
+This WebExtension provides a simple command line interface for Firefox to execute basic commands. You can open the small interface by pressing the shortcut `Ctrl+Shift+L`.
 
 ![](https://github.com/roccosportal/webcli/blob/master/preview.gif)
 
 ## requirements
 Firefox version 48.0a1 or higher.
+
+## status
+Warning: this is not even alpha status. Probably a lot of bugs and and still under heavy changes.
+
+## installation
+You can test this extension by opening `about:debugging` as website. Click on `Load Temporary Add-on`. Browse to this extension and open the `manifest.json`. Now press `Ctrl+Shift+L` in any open tab.
 
 ## commands
 
@@ -40,7 +46,11 @@ And also change the title.
 
 `bookmarks move /to/a/new/place/this-interesting-website /other-place/better-title`
 
-## Todos
+## more
+Have a look at the [/docs](docs/basics.md)
+
+
+## todos
 
 * Add help command
 * Add an open function to the bookmark command
