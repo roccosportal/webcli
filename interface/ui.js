@@ -130,7 +130,7 @@ ui.doActionResponse = function(response, request){
   }
 
   if(typeof response.message !== 'undefined'){
-    ui.appendOutput(response.success, response.message);
+    ui.appendOutput(response.success, response.message, response.info);
   }
 };
 
@@ -241,12 +241,52 @@ ui.resizeInput = function(){
   ui.$input.style = 'width:' + (chars * 8 + 10) + 'px';
 };
 
-ui.appendOutput = function(success, message){
+ui.appendOutput = function(success, message, info){
   var li = document.createElement('li');
   var state = success ? 'success' : 'failure';
-
-  li.innerHTML = '<p class="state ' + state + '">*</p>' +  message;
+  li.className = state;
+  li.innerHTML = '<span class="message">' + message + '</span>' + ui.infoToOutput(info);
   ui.$outputlist.insertAdjacentElement('afterbegin', li);
+};
+
+ui.infoToOutput = function(info){
+  var s = '<span class="lowlight">{</span>';
+  var type = null;
+  var first = true;
+  for(var propertyName in info) {
+    type = typeof info[propertyName];
+    if(type !== 'boolean' && type !== 'string' && type !== 'number'){
+      continue;
+    }
+
+    if(first){
+      first = false;
+    }
+    else {
+      s += '<span class="lowlight">,</span>';
+    }
+
+    s += '<span class="middlelight">' + propertyName + '</span>';
+    s += '<span class="lowlight">:</span>';
+    s += '<span class="highlight">';
+    if(type === 'string'){
+        s += '"' + info[propertyName] + '"';
+    }
+    else if(type === 'boolean'){
+      if(info[propertyName]){
+        s += 'true';
+      }
+      else {
+        s += 'false';
+      }
+    }
+    else {
+      s += info[propertyName];
+    }
+    s += '</span>';
+  }
+  s += '<span class="lowlight">}</span>';
+  return s;
 };
 
 ui.init();

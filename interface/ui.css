@@ -57,30 +57,45 @@ body {
   /*height: 60px;*/
   /*overflow-y: auto;*/
   background-color: #0E313D;
-  color: #BCC1C2;
+  color: #A6ABAC;
   padding: 0px 8px;
-  line-height: 14px;
-  font: normal 14px Arial;
+  line-height: 12px;
+  font: normal 12px Arial;
 }
 
 #output {
   padding: 3px 0px;
 }
 
-#outputarea ul li p.state {
-  float:left;
-  font-weight: bold;
-  padding-right: 4px;
+#outputarea ul li {
+  padding-left: 4px;
 }
 
-#outputarea ul li p.failure {
-  color: red;
+
+#outputarea ul li.success {
+  border-left: 3px solid green;
 }
 
-#outputarea ul li p.success {
-  color: green;
+#outputarea ul li.failure {
+  border-left: 3px solid red;
 }
 
-#outputarea ul li p.failure {
-  color: red;
+#outputarea ul li span.message {
+  padding-right: 6px;
+}
+
+#outputarea ul li span.lowlight, #outputarea ul li span.middlelight, #outputarea ul li span.highlight {
+  padding: 0px 2px;
+}
+
+#outputarea ul li span.lowlight {
+  color: #808080;
+}
+
+#outputarea ul li span.middlelight {
+  color: #A6A6A6;
+}
+
+#outputarea ul li span.highlight {
+  color: #C2C2C2;
 }

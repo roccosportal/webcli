@@ -19,3 +19,4 @@ No values.
 | command | the command object |
 | success | states if the command could be interpreted and executed |
 | message | a message that contains further information |
+| info | a object that contains some further information |

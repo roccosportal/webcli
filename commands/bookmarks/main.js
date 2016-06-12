@@ -68,7 +68,7 @@ webcli.commands.bookmarks.onDo = function(options, callback){
       var addpath = (typeof args[1] !== 'undefined') ? args[1] : '/';
       // add bookmark
       return webcli.commands.bookmarks.add(addpath, options.ui.tab.url, options.ui.tab.title, function(response){
-          callback(true, 'Bookmark created: ' + JSON.stringify({title : response.bookmark.title, path: addpath}));
+          callback(true, 'Bookmark created', {title : response.bookmark.title, path: addpath});
       });
     }
     else if (args[0] === 'remove') {
@@ -76,10 +76,10 @@ webcli.commands.bookmarks.onDo = function(options, callback){
       return webcli.commands.bookmarks.remove(removepath, function(response){
           if(response.success){
             var type = response.isFolder ? 'Folder' : 'Bookmark';
-            callback(true, type + ' removed: ' + JSON.stringify({title : response.bookmark.title, path: removepath}));
+            callback(true, type + ' removed',  {title : response.bookmark.title, path: removepath});
           }
           else {
-            callback(false, 'Path not found: ' + JSON.stringify({ path: removepath}));
+            callback(false, 'Path not found', { path: removepath});
           }
       });
     }
@@ -93,10 +93,10 @@ webcli.commands.bookmarks.onDo = function(options, callback){
             if(response.newTitle !== null){
               json.title = response.newTitle;
             }
-            callback(true, type +' moved: ' + JSON.stringify(json));
+            callback(true, type +' moved', json);
           }
           else {
-            callback(false, 'Path not found: ' + JSON.stringify({ path: frompath}));
+            callback(false, 'Path not found', { path: frompath});
           }
       });
     }
