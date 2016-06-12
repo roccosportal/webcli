@@ -68,7 +68,7 @@ webcli.commands.bookmarks.onDo = function(options, callback){
       var addpath = (typeof args[1] !== 'undefined') ? args[1] : '/';
       // add bookmark
       return webcli.commands.bookmarks.add(addpath, options.ui.tab.url, options.ui.tab.title, function(response){
-          callback(true, 'Bookmark created', {title : response.bookmark.title, path: addpath});
+          callback(true, 'Bookmark created', {title : response.bookmark.title, path: addpath, url : options.ui.tab.url});
       });
     }
     else if (args[0] === 'remove') {
